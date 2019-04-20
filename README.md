@@ -1,8 +1,6 @@
-# OddEvenSort
+# ShearSort using MPI
 ParallelComputation
 
-Parallel computation version of Bubble sort - runs in O(n)
+Put the file pixel.txt in C:\ in order to run Initial.exe
 
-
-Run with 20 processes
-
+You will have to run the .exe file with the same amount of processes indicated inside the text file and the magic will begin
