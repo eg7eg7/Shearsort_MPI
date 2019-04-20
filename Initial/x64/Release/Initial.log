@@ -1,0 +1,4 @@
+﻿  icpi.cpp
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\icpi.cpp(242): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+  test.cpp
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(103): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?

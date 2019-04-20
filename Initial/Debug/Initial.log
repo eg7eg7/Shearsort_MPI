@@ -1,0 +1,31 @@
+﻿  icpi.cpp
+  test.cpp
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(23): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 2 has type 'int'
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(23): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 5 has type 'double'
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(23): warning C4474: 'printf' : too many arguments passed for format string
+  d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(23): note: placeholders and their parameters expect 6 variadic arguments, but 7 were provided
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(26): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 2 has type 'int'
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(26): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 5 has type 'double'
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(26): warning C4474: 'printf' : too many arguments passed for format string
+  d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(26): note: placeholders and their parameters expect 6 variadic arguments, but 7 were provided
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(53): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(55): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(46): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\string.h(440): note: see declaration of 'strtok'
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(48): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\string.h(440): note: see declaration of 'strtok'
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(50): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\string.h(440): note: see declaration of 'strtok'
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(52): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\string.h(440): note: see declaration of 'strtok'
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(54): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\string.h(440): note: see declaration of 'strtok'
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(56): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\string.h(440): note: see declaration of 'strtok'
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(78): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(69): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
+d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\test.cpp(99): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
+  Initial.vcxproj -> D:\OneDrive\Education\Afeka\Courses\Parallel Computation\Shearsort\Debug\Initial.exe
