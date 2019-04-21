@@ -1,12 +1,18 @@
 # ShearSort using MPICH, an implementation of MPI (Message Passing Interface)
+
 Parallel Computation
+
 
 Put the file pixel.txt in C:\ in order to run Initial.exe
 
+
+
 You will have to run the .exe file with the same amount of processes indicated inside the text file and the magic will begin!
 
-The format of the text file should look like this:
 
+
+The format of the text file should look like this:
+**************************************************
 16
 0  1000  146  0.1  0.13  0.9
 1  450   55   0.3  0.12  0.61
@@ -24,10 +30,15 @@ The format of the text file should look like this:
 13  1000 146  0.1  0.13  0.5
 14  450  55   0.3  0.12  0.6
 15 -12   600  0.6   0.4    0.4
+*************************************************
+
 
 The first number is the number of elements ; should be a square number.
+
 each row is a Pixel element (id:int,x:int,y:int,rgb(float,float,float))
+
 After reading the file the output of the program looks like the following:
+
 
 num of elements = 16
 ********************************************
