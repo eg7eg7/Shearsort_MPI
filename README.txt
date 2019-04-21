@@ -40,7 +40,6 @@ each row is a Pixel element (id:int,x:int,y:int,rgb(float,float,float))
 After reading the file the output of the program looks like the following:
 
 
-num of elements = 16
 ********************************************
 Before sorting:
 Printing matrix..

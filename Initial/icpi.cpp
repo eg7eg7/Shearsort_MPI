@@ -1,3 +1,9 @@
+/*
+EDEN DUPONT 204808596
+DANIIL ROLNIK 334018009
+*/
+
+
 #include "mpi.h"
 #include <stdio.h>
 #include <math.h>
@@ -5,7 +11,7 @@
 #include <string.h>
 
 //#define DEBUG //prints throughout file
-//#define DEBUG_CART
+//#define DEBUG_CART //prints new ranks of processes and their coordinates
 //#define DEBUG_TOK //reading file debug
 #define PRINT_MATRICES
 
@@ -17,6 +23,7 @@ struct Pixel
 	int y;
 	float rgb[3];
 };
+
 void setPixel(struct Pixel *pix, char *s)
 {
 	char * _word;
@@ -39,17 +46,17 @@ void setPixel(struct Pixel *pix, char *s)
 #ifdef DEBUG_TOK
 	printf("token = %s\n", _word);
 #endif // DEBUG_TOK
-	(*pix).rgb[0] = atof(_word);
+	(*pix).rgb[0] = (float) atof(_word);
 	_word = strtok(NULL, " ");
 #ifdef DEBUG_TOK
 	printf("token = %s\n", _word);
 #endif // DEBUG_TOK
-	(*pix).rgb[1] = atof(_word);
+	(*pix).rgb[1] = (float) atof(_word);
 	_word = strtok(NULL, " ");
 #ifdef DEBUG_TOK
 	printf("token = %s\n", _word);
 #endif // DEBUG_TOK
-	(*pix).rgb[2] = atof(_word);
+	(*pix).rgb[2] = (float) atof(_word);
 }
 void readPixelFromFile(struct Pixel **pixels, int *num_elements)
 {
@@ -70,7 +77,9 @@ void readPixelFromFile(struct Pixel **pixels, int *num_elements)
 	if (fgets(line, line_size, file) != NULL)
 	{
 		num_elements_file = atoi(line);
+#ifdef DEBUG_TOK
 		printf("num of elements = %d\n", num_elements_file);
+#endif // DEBUG_TOK
 		*num_elements = num_elements_file;
 		num_in_line = (int)sqrt(num_elements_file);
 #ifdef DEBUG_TOK
@@ -92,6 +101,9 @@ void readPixelFromFile(struct Pixel **pixels, int *num_elements)
 	free(line);
 }
 
+
+//If both pixels are black (rgb[] = {0.0, 0.0, 0.0}) – compare distances from the pixel to the coordinate origin (0, 0). 
+//Otherwise compare their intensity - sum of elements of arrays rgb[] of the pixels.
 int compareAsc(struct Pixel p1, struct Pixel p2)
 {
 	float color1_1 = p1.rgb[0];
@@ -128,10 +140,14 @@ int compareAsc(struct Pixel p1, struct Pixel p2)
 	return 0;
 }
 
+//If both pixels are black (rgb[] = {0.0, 0.0, 0.0}) – compare distances from the pixel to the coordinate origin (0, 0). 
+//Otherwise compare their intensity - sum of elements of arrays rgb[] of the pixels.
 int compareDesc(struct Pixel p1, struct Pixel p2)
 {
 	return (-1)*compareAsc(p1, p2);
 }
+
+
 void printPixel(struct Pixel *pix)
 {
 	printf("pixel id=%4d\trgb = %.2f,%.2f,%.2f\tx = %6d\ty = %6d\n", pix->id, pix->rgb[0], pix->rgb[1], pix->rgb[2], pix->x, pix->y);
@@ -150,10 +166,12 @@ void printPixelsRow(struct Pixel * pixels, int size, int order) {
 }
 
 //if no neighbour process, send -1
-void oddEvenSort(int location, int left, int right, MPI_Datatype MPIType, MPI_Comm comm, struct Pixel *myPixel, struct Pixel *otherPixel, int(*compar1)(struct Pixel, struct Pixel), int num_row)
+//location = rank of process
+//right/left = rank of neighbour processes, send -1 if none.
+void oddEvenSort(int location, int left, int right, MPI_Datatype MPIType, MPI_Comm comm, struct Pixel *myPixel, int(*compar1)(struct Pixel, struct Pixel), int num_row)
 {
 	MPI_Status status;
-
+	struct Pixel otherPixel;
 	int(*compare)(struct Pixel, struct Pixel);
 	compare = compar1;
 
@@ -164,19 +182,19 @@ void oddEvenSort(int location, int left, int right, MPI_Datatype MPIType, MPI_Co
 			if (location % 2 == 0 && right > -1)
 			{
 				//receive from odd
-				MPI_Sendrecv(myPixel, 1, MPIType, right, 0, otherPixel, 1, MPIType, right, 0, comm, &status);
-				if (compare(*myPixel, *otherPixel) == -1)
+				MPI_Sendrecv(myPixel, 1, MPIType, right, 0, &otherPixel, 1, MPIType, right, 0, comm, &status);
+				if (compare(*myPixel, otherPixel) == -1)
 				{
-					*myPixel = *otherPixel;
+					*myPixel = otherPixel;
 				}
 			}
 			else if (location % 2 == 1 && left > -1)
 			{
 				//receive from even
-				MPI_Sendrecv(myPixel, 1, MPIType, left, 0, otherPixel, 1, MPIType, left, 0, comm, &status);
-				if (compare(*myPixel, *otherPixel) == 1)
+				MPI_Sendrecv(myPixel, 1, MPIType, left, 0, &otherPixel, 1, MPIType, left, 0, comm, &status);
+				if (compare(*myPixel, otherPixel) == 1)
 				{
-					*myPixel = *otherPixel;
+					*myPixel = otherPixel;
 				}
 			}
 		}
@@ -185,19 +203,19 @@ void oddEvenSort(int location, int left, int right, MPI_Datatype MPIType, MPI_Co
 			if (location % 2 == 1 && location > 0 && right > -1)
 			{
 				//receive from even
-				MPI_Sendrecv(myPixel, 1, MPIType, right, 0, otherPixel, 1, MPIType, right, 0, comm, &status);
-				if (compare(*myPixel, *otherPixel) == -1)
+				MPI_Sendrecv(myPixel, 1, MPIType, right, 0, &otherPixel, 1, MPIType, right, 0, comm, &status);
+				if (compare(*myPixel, otherPixel) == -1)
 				{
-					*myPixel = *otherPixel;
+					*myPixel = otherPixel;
 				}
 			}
 			else if (location % 2 == 0 && left > -1)
 			{
 				//receive from odd
-				MPI_Sendrecv(myPixel, 1, MPIType, left, 0, otherPixel, 1, MPIType, left, 0, comm, &status);
-				if (compare(*myPixel, *otherPixel) == 1)
+				MPI_Sendrecv(myPixel, 1, MPIType, left, 0, &otherPixel, 1, MPIType, left, 0, comm, &status);
+				if (compare(*myPixel, otherPixel) == 1)
 				{
-					*myPixel = *otherPixel;
+					*myPixel = otherPixel;
 				}
 			}
 		}
@@ -216,7 +234,7 @@ void printMatrixAsSnake(struct Pixel * pixels, int size)
 	}
 }
 
-void Shearsort(struct Pixel *myPixel, struct Pixel *otherPixel, int myRank, int matrix_size, MPI_Comm comm_orig_world, MPI_Datatype MPIType,int orderDesc) {
+void Shearsort(struct Pixel *myPixel, int myRank, int matrix_size, MPI_Comm comm_orig_world, MPI_Datatype MPIType,int orderDesc) {
 	MPI_Comm comm;
 	int dim[2]; //setting the cartesian dimensions
 	int period[] = { 0,0 };
@@ -252,56 +270,62 @@ void Shearsort(struct Pixel *myPixel, struct Pixel *otherPixel, int myRank, int 
 			//sort rows
 			if (coord[0] % 2 == 0)
 			{
-				//even row - Ascending 
-				oddEvenSort(newRank, left, right, MPIType, comm, myPixel, otherPixel, compare1, row_length);
+				//even row - sort 
+				oddEvenSort(newRank, left, right, MPIType, comm, myPixel, compare1, row_length);
 			}
 			else
 			{
-				//odd row - Descending
-				oddEvenSort(newRank, left, right, MPIType, comm, myPixel, otherPixel, compare2, row_length);
+				//odd row - sort in opposite way
+				oddEvenSort(newRank, left, right, MPIType, comm, myPixel, compare2, row_length);
 			}
 		}
 		else
 		{
-			//sort columns
-			oddEvenSort(newRank, up, down, MPIType, comm, myPixel, otherPixel, compare1, row_length);
+			//sort columns - same order as even rows
+			oddEvenSort(newRank, up, down, MPIType, comm, myPixel, compare1, row_length);
 		}
 	}
 }
-void main(int argc, char *argv[])
-{
+
+void MPI_Init_with_datatype(int argc, char *argv[], MPI_Datatype *PixelMPIType) {
 	struct Pixel pixel;
-	int myrank, size;
-	MPI_Datatype PixelMPIType;
+	
 	MPI_Datatype type[4] = { MPI_INT, MPI_INT, MPI_INT, MPI_FLOAT };
 	int blocklen[4] = { 1, 1, 1, 3 };
 	MPI_Aint disp[4];
 
 	MPI_Init(&argc, &argv);
-	MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
-	MPI_Comm_size(MPI_COMM_WORLD, &size);
+
 
 	// Create MPI user data type for partical
 	disp[0] = (char *)&pixel.id - (char *)&pixel;
 	disp[1] = (char *)&pixel.x - (char *)&pixel;
 	disp[2] = (char *)&pixel.y - (char *)&pixel;
 	disp[3] = (char *)pixel.rgb - (char *)&pixel;
-	MPI_Type_create_struct(4, blocklen, disp, type, &PixelMPIType);
-	MPI_Type_commit(&PixelMPIType);
+	MPI_Type_create_struct(4, blocklen, disp, type, PixelMPIType);
+	MPI_Type_commit(PixelMPIType);
+}
 
+void main(int argc, char *argv[])
+{
+	MPI_Datatype PixelMPIType;
+	MPI_Init_with_datatype(argc, argv, &PixelMPIType);
+	int myrank, size;
+	MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
+	MPI_Comm_size(MPI_COMM_WORLD, &size);
 	struct Pixel* pixels;
-	int mat_size = 0;
 	struct Pixel myPixel;
-	struct Pixel otherPixel;
+	int num_elements_in_matrix = 0;
+	int num_elements_in_row;
 	int abort = 0;
 
 	if (myrank == 0)
 	{
-		readPixelFromFile(&pixels, &mat_size);
+		readPixelFromFile(&pixels, &num_elements_in_matrix);
 		//check if number in file matches processes
-		int mat_size_squared = (int)sqrt(mat_size);
-		if (size != mat_size || mat_size_squared * mat_size_squared != mat_size) {
-			printf("Text file pixel.txt not matching.\nPlease run with %d processes.\nMake sure number of elements can be squared.\n", mat_size); fflush(stdout);
+		num_elements_in_row = (int)sqrt(num_elements_in_matrix);
+		if (size != num_elements_in_matrix || num_elements_in_row * num_elements_in_row != num_elements_in_matrix) {
+			printf("Text file pixel.txt not matching.\nPlease run with %d processes.\nMake sure number of elements can be squared.\n", num_elements_in_matrix); fflush(stdout);
 			abort = 1;
 		}
 	}
@@ -311,21 +335,23 @@ void main(int argc, char *argv[])
 		MPI_Abort(MPI_COMM_WORLD, 1);
 	}
 
-	MPI_Bcast(&mat_size, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Bcast(&num_elements_in_matrix, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	num_elements_in_row = (int)sqrt(num_elements_in_matrix);
+
 
 #ifdef PRINT_MATRICES
 	if (myrank == 0)
 	{
 		printf("********************************************\n");
 		printf("Before sorting:\n");
-		printMatrixAsSnake(pixels, sqrt(mat_size));
+		printMatrixAsSnake(pixels, num_elements_in_row);
 		printf("********************************************\n");
 	}
 #endif // PRINT_MATRICES
 
 	MPI_Scatter(pixels, 1, PixelMPIType, &myPixel, 1, PixelMPIType, 0, MPI_COMM_WORLD);
 	int orderDescending = 1;
-	Shearsort(&myPixel, &otherPixel, myrank, mat_size, MPI_COMM_WORLD, PixelMPIType, orderDescending);
+	Shearsort(&myPixel, myrank, num_elements_in_matrix, MPI_COMM_WORLD, PixelMPIType, orderDescending);
 
 #ifdef DEBUG
 	printf("mat size broadcasted = %d, myrank=%d , myPixel = %d\n", mat_size, myrank, myPixel.id);
@@ -339,7 +365,7 @@ void main(int argc, char *argv[])
 #ifdef PRINT_MATRICES
 		printf("********************************************\n");
 		printf("After sorting:\n");
-		printMatrixAsSnake(pixels, sqrt(mat_size));
+		printMatrixAsSnake(pixels, num_elements_in_row);
 		printf("********************************************\n");
 #endif // PRINT_MATRICES
 		free(pixels);

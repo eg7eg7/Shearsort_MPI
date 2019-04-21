@@ -1,9 +1,2 @@
 ﻿  icpi.cpp
-d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\icpi.cpp(42): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\icpi.cpp(47): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\icpi.cpp(52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\icpi.cpp(321): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-d:\onedrive\education\afeka\courses\parallel computation\shearsort\initial\icpi.cpp(342): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-  test.cpp
-  Generating Code...
-  Initial.vcxproj -> D:\OneDrive\Education\Afeka\Courses\Parallel Computation\Shearsort\x64\Debug\Initial.exe
+  Initial.vcxproj -> C:\Users\eg7eg\Documents\Shearsort_MPI\x64\Debug\Initial.exe
